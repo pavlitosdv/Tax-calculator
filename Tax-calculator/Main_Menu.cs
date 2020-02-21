@@ -58,7 +58,48 @@ namespace Tax_calculator
                                               new Interest( new DateTime(2016,03,16), new DateTime(2019,12,31), 0.053, 0.073)
             };
 
-         
+            while (true)
+            {
+                double capital;
+
+                #region Insert capital and dates Section
+
+                Console.WriteLine("Online Interest Calculator");
+                Console.WriteLine("Insert the total amount");
+
+                while (!double.TryParse(Console.ReadLine(), out capital))
+                {
+                    Console.WriteLine("You did not enter a valid number");
+                    Console.WriteLine("Enter a valid total amount");
+                }
+
+                Console.WriteLine("Enter the Start Date dd/mm/yyyy");
+                Console.WriteLine("choose between 01/01/2000 and 31/12/2019");
+                DateTime startDate;
+                while (!DateTime.TryParse(Console.ReadLine(), out startDate) || startDate < new DateTime(2000, 01, 01))
+                {
+                    Console.WriteLine("The Start date in not valid");
+                    Console.WriteLine("Please insert again the start date");
+                }
+
+                Console.WriteLine("Enter the End Date dd/mm/yyyy");
+                Console.WriteLine("choose between 01/01/2000 and 31/12/2019");
+                DateTime endDate;
+                while (!DateTime.TryParse(Console.ReadLine(), out endDate) || endDate > new DateTime(2016, 03, 15) || endDate.CompareTo(startDate) <= 0)
+                {
+                    Console.WriteLine("Please pick a correct date");
+                    Console.Write("Enter again the End date ");
+                    Console.WriteLine();
+                }
+
+                #endregion
+
+                TimeSpan days;
+                double Dikeopratikos = 0;
+                double Yperimerias = 0;
+
+              
+            }
         }
 
         private double Calculate_Dikeopratikos_Tokos(double capital, double DikeopratikosTokos, TimeSpan days)
