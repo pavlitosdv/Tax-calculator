@@ -9,6 +9,7 @@ namespace Tax_calculator
     class Main_Menu
     {
 
+
         public void ShowMenu()
         {
             // Array with predifend dates and rates
@@ -85,7 +86,7 @@ namespace Tax_calculator
                 Console.WriteLine("Enter the End Date dd/mm/yyyy");
                 Console.WriteLine("choose between 01/01/2000 and 31/12/2019");
                 DateTime endDate;
-                while (!DateTime.TryParse(Console.ReadLine(), out endDate) || endDate > new DateTime(2016, 03, 15) || endDate.CompareTo(startDate) <= 0)
+                while (!DateTime.TryParse(Console.ReadLine(), out endDate) || endDate > new DateTime(2019, 12, 31) || endDate.CompareTo(startDate) <= 0)
                 {
                     Console.WriteLine("Please pick a correct date");
                     Console.Write("Enter again the End date ");
@@ -98,7 +99,84 @@ namespace Tax_calculator
                 double Dikeopratikos = 0;
                 double Yperimerias = 0;
 
-              
+                // Rates Calculations
+                for (int i = 0; i < dtss.Length; i++)
+                {
+                    double local_store1 = 0;
+                    double local_store2 = 0;
+
+                    if (startDate >= dtss[i].StartDate)
+                    {
+                        if (endDate.Date <= dtss[i].EndDate.Date)
+                        {
+                            days = endDate.AddDays(1).Subtract(startDate);
+                            Dikeopratikos = Calculate_Dikeopratikos_Tokos(capital, dtss[i].DikeopratikosTokos, days);
+                            Yperimerias = Calculate_Tokos_Yperimerias(capital, dtss[i].TokosYperimerias, days);
+
+                            PrintEachPeriodDetails(startDate, endDate, days, dtss[i], Dikeopratikos, Yperimerias);
+
+                            local_store1 += Dikeopratikos;
+                            local_store2 += Yperimerias;
+
+                            PrintTotalAmount(capital, local_store1, local_store2);
+                        }
+                        else if (endDate > dtss[i].EndDate)
+                        {
+                            //in this section the algorythim is devided in three sections
+
+                            //First period - rates
+                            days = dtss[i].EndDate.AddDays(1).Subtract(startDate);
+                            Dikeopratikos = Calculate_Dikeopratikos_Tokos(capital, dtss[i].DikeopratikosTokos, days);
+                            Yperimerias = Calculate_Tokos_Yperimerias(capital, dtss[i].TokosYperimerias, days);
+
+                            local_store1 += Dikeopratikos;
+                            local_store2 += Yperimerias;
+
+                            PrintEachPeriodDetails(startDate, dtss[i].EndDate, days, dtss[i], Dikeopratikos, Yperimerias);
+
+                            Console.WriteLine();
+
+                            //Middle period - rates 
+                            for (int j = 0; j < dtss.Length; j++)
+                            {
+                                if (startDate < dtss[j].StartDate && endDate > dtss[j].EndDate)
+                                {
+                                    days = dtss[j].EndDate.AddDays(1).Subtract(dtss[j].StartDate);
+                                    Dikeopratikos = Calculate_Dikeopratikos_Tokos(capital, dtss[j].DikeopratikosTokos, days);
+                                    Yperimerias = Calculate_Tokos_Yperimerias(capital, dtss[j].TokosYperimerias, days);
+
+                                    PrintEachPeriodDetails(dtss[j].StartDate, dtss[j].EndDate, days, dtss[i], Dikeopratikos, Yperimerias);
+
+                                    Console.WriteLine();
+                                    local_store1 += Dikeopratikos;
+                                    local_store2 += Yperimerias;
+                                }
+                            }
+
+                            //Last period - rates
+                            for (int z = dtss.Length - 1; z >= 0; z--)
+                            {
+                                if (z - 1 > 0 && endDate <= dtss[z].EndDate && endDate >= dtss[z].StartDate)
+                                {
+                                    days = endDate.AddDays(1).Subtract(dtss[z].StartDate);
+                                    Dikeopratikos = Calculate_Dikeopratikos_Tokos(capital, dtss[z].DikeopratikosTokos, days);
+                                    Yperimerias = Calculate_Tokos_Yperimerias(capital, dtss[z].TokosYperimerias, days);
+
+                                    PrintEachPeriodDetails(dtss[z].StartDate, endDate, days, dtss[i], Dikeopratikos, Yperimerias);
+
+                                    local_store1 += Dikeopratikos;
+                                    local_store2 += Yperimerias;
+
+                                    PrintTotalAmount(capital, local_store1, local_store2);
+                                }
+
+                            }
+                        }
+
+                    }
+
+                }
+
             }
         }
 

@@ -9,7 +9,10 @@ namespace Tax_calculator
     class Program
     {
         static void Main(string[] args)
-        { 
+        {
+            Main_Menu main = new Main_Menu();
+
+            main.ShowMenu();
         }
     }
 }
