@@ -162,7 +162,7 @@ namespace Tax_calculator
                                     Dikeopratikos = Calculate_Dikeopratikos_Tokos(capital, dtss[z].DikeopratikosTokos, days);
                                     Yperimerias = Calculate_Tokos_Yperimerias(capital, dtss[z].TokosYperimerias, days);
 
-                                    PrintEachPeriodDetails(dtss[z].StartDate, endDate, days, dtss[i], Dikeopratikos, Yperimerias);
+                                    PrintEachPeriodDetails(dtss[z].StartDate, endDate, days, dtss[z], Dikeopratikos, Yperimerias);
 
                                     local_store1 += Dikeopratikos;
                                     local_store2 += Yperimerias;
